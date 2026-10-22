@@ -1,0 +1,87 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && (
+        request.auth.uid == "NaqBFv91rFaLsGbb6qch9NkW3Wy2"
+        || request.auth.token.get("email", "").lower() == "admin@farebid.com"
+      );
+    }
+
+    function validRole(role) {
+      return role in ["admin", "driver", "passenger"];
+    }
+
+    match /users/{userId} {
+      allow create: if signedIn()
+        && request.auth.uid == userId
+        && request.resource.data.keys().hasAll([
+          "uid", "email", "displayName", "role", "createdAt"
+        ])
+        && request.resource.data.keys().hasOnly([
+          "uid", "email", "displayName", "role", "createdAt"
+        ])
+        && request.resource.data.uid == userId
+        && request.resource.data.email == request.auth.token.email
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 100
+        && request.resource.data.createdAt == request.time
+        && (
+          request.resource.data.role in ["driver", "passenger"]
+          || (request.resource.data.role == "admin" && isAdmin())
+        );
+
+      allow get: if signedIn() && (
+        request.auth.uid == userId 
+        || isAdmin()
+      );
+      
+      allow list: if isAdmin();
+
+      allow update: if signedIn()
+        && (
+          (
+            request.auth.uid == userId
+            && request.resource.data.diff(resource.data).affectedKeys()
+                .hasOnly(["displayName"])
+            && request.resource.data.displayName is string
+            && request.resource.data.displayName.size() <= 100
+          )
+          || (
+            request.auth.uid == userId
+            && request.resource.data.diff(resource.data).affectedKeys()
+                .hasAny(["isOnline", "lastOnlineAt", "vehicle", "phone", "emergencyContact", "driverStatus"])
+            && !request.resource.data.diff(resource.data).affectedKeys()
+                .hasAny(["role", "email", "uid", "createdAt"])
+          )
+          || (
+            isAdmin()
+            && request.resource.data.diff(resource.data).affectedKeys()
+                .hasAny(["role", "driverStatus", "isOnline", "statusUpdatedAt"])
+          )
+          || (
+            request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(["ratingAverage", "ratingCount", "ratings", "totalDistanceKm", "completedRidesCount"])
+          )
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    match /rides/{rideId} {
+      allow read: if signedIn();
+      allow create: if signedIn();
+      allow update: if signedIn();
+      allow delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

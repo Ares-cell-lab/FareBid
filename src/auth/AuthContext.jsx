@@ -18,8 +18,8 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, db } from "../firebase.js";
-import { isAdminEmail } from "./roles.js";
+import { auth, db } from "../fare-bidweb.js";
+import { isAdminEmail, normalizeRole } from "./roles.js";
 import { friendlyError } from "./authErrors.js";
 
 const AuthContext = createContext(null);
@@ -28,7 +28,7 @@ const AuthContext = createContext(null);
 // before the sign-up form has finished. So the form writes the name and
 // role it collected here first, and loadProfile() reads them when it
 // creates the profile.
-let pendingSignUp = { name: "", role: "patient" };
+let pendingSignUp = { name: "", role: "passenger" };
 
 // Reads users/{uid}. If it doesn't exist yet (brand-new account), creates it.
 async function loadProfile(firebaseUser) {
@@ -38,8 +38,9 @@ async function loadProfile(firebaseUser) {
   if (snapshot.exists()) {
     const profile = snapshot.data();
     // An admin email is always admin, whatever the document says.
-    return isAdminEmail(firebaseUser.email) ? { ...profile, role: "admin" } : profile;
-  }
+   return isAdminEmail(firebaseUser.email) ? { ...profile, role: "admin" } : profile;
+    }
+  
 
   const newProfile = {
     uid: firebaseUser.uid,
@@ -50,7 +51,7 @@ async function loadProfile(firebaseUser) {
     createdAt: serverTimestamp(),
   };
   await setDoc(ref, newProfile);
-  pendingSignUp = { name: "", role: "patient" };
+  pendingSignUp = { name: "", role: "passenger" };
   return newProfile;
 }
 
@@ -103,7 +104,7 @@ export function AuthProvider({ children }) {
 
   // The same Google button works for new and returning users.
   // `role` is only used if this Google account is new.
-  async function signInWithGoogle(role = "patient") {
+  async function signInWithGoogle(role = "passenger") {
     setAuthError("");
     pendingSignUp = { name: "", role };
     await signInWithPopup(auth, new GoogleAuthProvider());

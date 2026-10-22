@@ -10,16 +10,16 @@
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext.jsx";
 import { ROLE_HOME } from "../auth/roles.js";
-import Heartbeat from "./Heartbeat.jsx";
+import RideRoute from "./RideRoute.jsx";
 
 export default function ProtectedRoute({ allow, children }) {
   const { user, role, loading } = useAuth();
 
   if (loading) {
     return (
-      <div className="loader" role="status">
-        <Heartbeat className="loader-line" />
-        <p>Checking your access…</p>
+      <div className="grid min-h-screen place-content-center justify-items-center gap-4 bg-slate-50 text-slate-500" role="status">
+        <RideRoute className="max-w-48 text-emerald-500" />
+        <p>Checking your FareBid account…</p>
       </div>
     );
   }
