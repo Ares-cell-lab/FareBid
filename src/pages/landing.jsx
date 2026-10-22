@@ -40,7 +40,7 @@ export default function Landing() {
   return (
     <PageTransition className="min-h-screen bg-white text-slate-950">
       <header className="sticky top-0 z-20 border-b border-slate-200/80 bg-white/90 backdrop-blur">
-        <div className="mx-auto flex min-h-[76px] max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
+        <div className="mx-auto flex min-h-19 max-w-7xl items-center justify-between gap-6 px-5 sm:px-8">
           <Logo />
           <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex" aria-label="Main navigation">
             <a className="transition hover:text-emerald-700" href="#how">How it works</a>
@@ -93,7 +93,7 @@ export default function Landing() {
               transition={{ duration: 0.7, delay: 0.2 }}
             >
               <div className="absolute inset-8 rounded-full bg-emerald-200/60 blur-3xl" />
-              <div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-900/10 sm:p-8">
+              <div className="relative overflow-hidden rounded-4xl border border-slate-200 bg-white p-6 shadow-2xl shadow-slate-900/10 sm:p-8">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-500">FareBid ride</p>
