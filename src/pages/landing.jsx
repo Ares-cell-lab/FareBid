@@ -190,10 +190,51 @@ export default function Landing() {
         </section>
       </main>
 
-      <footer className="border-t border-slate-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-7 sm:px-8">
-          <Logo />
-          <p className="text-sm text-slate-500">A simpler way to get there.</p>
+      <footer className="border-t border-slate-800 bg-slate-950 text-white">
+        <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1fr_2fr] md:items-start">
+          <div>
+            <Logo inverted />
+            <p className="mt-4 text-sm text-slate-400">A simpler way to get there.</p>
+          </div>
+          <section aria-labelledby="creator-contacts-heading">
+            <h2 id="creator-contacts-heading" className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-400">
+              Contact the creators :
+              <p>Oyeniyi Adenike</p>
+              <p>Owolabi Daniel</p>
+            </h2>
+            <div className="mt-5 grid gap-6 sm:grid-cols-2">
+              <div>
+                <h3 className="text-sm font-semibold text-slate-300">Email</h3>
+                <ul className="mt-2 grid gap-2">
+                  <li>
+                    <a className="text-sm text-white transition hover:text-emerald-300" href="mailto:dannyares3107@gmail.com">
+                      dannyares3107@gmail.com
+                    </a>
+                  </li>
+                  <li>
+                    <a className="text-sm text-white transition hover:text-emerald-300" href="mailto:doyin2555@gmail.com">
+                      doyin2555@gmail.com
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="text-sm font-semibold text-slate-300">Phone</h3>
+                <ul className="mt-2 grid gap-2">
+                  <li>
+                    <a className="text-sm text-white transition hover:text-emerald-300" href="tel:07077793869">
+                      07077793869
+                    </a>
+                  </li>
+                  <li>
+                    <a className="text-sm text-white transition hover:text-emerald-300" href="tel:07026819495">
+                      07026819495
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </section>
         </div>
       </footer>
     </PageTransition>
