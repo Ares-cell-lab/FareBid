@@ -10,16 +10,21 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {
   createUserWithEmailAndPassword,
+  deleteUser,
+  EmailAuthProvider,
   GoogleAuthProvider,
   onAuthStateChanged,
+  reauthenticateWithCredential,
+  reauthenticateWithPopup,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
   updateProfile,
 } from "firebase/auth";
-import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "../fare-bidweb.js";
-import { isAdminEmail, normalizeRole } from "./roles.js";
+import { isAdminEmail } from "./roles.js";
 import { friendlyError } from "./authErrors.js";
 
 const AuthContext = createContext(null);
@@ -110,6 +115,60 @@ export function AuthProvider({ children }) {
     await signInWithPopup(auth, new GoogleAuthProvider());
   }
 
+  async function resetPassword(email) {
+    setAuthError("");
+    await sendPasswordResetEmail(auth, email);
+  }
+
+  async function deleteAccount(password) {
+    setAuthError("");
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error("No user is currently signed in.");
+
+    // If password provided and account has password credential, re-authenticate first
+    const isPasswordProvider = currentUser.providerData.some(
+      (p) => p.providerId === "password"
+    );
+
+    if (isPasswordProvider && password) {
+      const credential = EmailAuthProvider.credential(currentUser.email, password);
+      await reauthenticateWithCredential(currentUser, credential);
+    }
+
+    // Attempt to delete user document from Firestore (allowed if admin or permitted)
+    try {
+      await deleteDoc(doc(db, "users", currentUser.uid));
+    } catch (firestoreErr) {
+      console.warn("Could not delete user document from firestore:", firestoreErr);
+    }
+
+    // Permanently delete user from Firebase Auth
+    try {
+      await deleteUser(currentUser);
+    } catch (error) {
+      if (error.code === "auth/requires-recent-login") {
+        const isGoogleProvider = currentUser.providerData.some(
+          (p) => p.providerId === "google.com"
+        );
+        if (isGoogleProvider) {
+          const provider = new GoogleAuthProvider();
+          await reauthenticateWithPopup(currentUser, provider);
+          try {
+            await deleteDoc(doc(db, "users", currentUser.uid));
+          } catch (_) {}
+          await deleteUser(currentUser);
+        } else {
+          throw error;
+        }
+      } else {
+        throw error;
+      }
+    }
+
+    setUser(null);
+    setProfile(null);
+  }
+
   async function logOut() {
     await signOut(auth);
   }
@@ -123,6 +182,8 @@ export function AuthProvider({ children }) {
     signUp,
     signIn,
     signInWithGoogle,
+    resetPassword,
+    deleteAccount,
     logOut,
   };
 
