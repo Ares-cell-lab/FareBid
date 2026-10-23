@@ -434,11 +434,10 @@ export default function PassengerBook() {
                     <button
                       type="button"
                       onClick={() => setSelectionMode("pickup")}
-                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold transition ${
-                        selectionMode === "pickup"
+                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold transition ${selectionMode === "pickup"
                           ? "bg-emerald-500 text-slate-950 shadow-md"
                           : "text-slate-400 hover:text-white"
-                      }`}
+                        }`}
                     >
                       <span className="size-2 rounded-full bg-white" />
                       Set Pickup (A)
@@ -446,11 +445,10 @@ export default function PassengerBook() {
                     <button
                       type="button"
                       onClick={() => setSelectionMode("dropoff")}
-                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold transition ${
-                        selectionMode === "dropoff"
+                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 font-semibold transition ${selectionMode === "dropoff"
                           ? "bg-rose-500 text-white shadow-md"
                           : "text-slate-400 hover:text-white"
-                      }`}
+                        }`}
                     >
                       <span className="size-2 rounded-full bg-white" />
                       Set Destination (B)
@@ -666,8 +664,8 @@ export default function PassengerBook() {
                         {offeredFare < baseCalculatedFare
                           ? `Saver Offer (${Math.round(((baseCalculatedFare - offeredFare) / baseCalculatedFare) * 100)}% below suggested)`
                           : offeredFare > baseCalculatedFare
-                          ? `Priority Offer (${Math.round(((offeredFare - baseCalculatedFare) / baseCalculatedFare) * 100)}% above suggested)`
-                          : "Standard Suggested Rate"}
+                            ? `Priority Offer (${Math.round(((offeredFare - baseCalculatedFare) / baseCalculatedFare) * 100)}% above suggested)`
+                            : "Standard Suggested Rate"}
                       </p>
                     </div>
 
@@ -733,11 +731,10 @@ export default function PassengerBook() {
                   {rideData?.bids?.map((bid, i) => (
                     <div
                       key={i}
-                      className={`rounded-2xl border p-4 ${
-                        bid.bidder === "driver"
+                      className={`rounded-2xl border p-4 ${bid.bidder === "driver"
                           ? "border-amber-500/30 bg-amber-950/20"
                           : "border-white/10 bg-slate-950/50"
-                      }`}
+                        }`}
                     >
                       <div className="flex items-center justify-between">
                         <span className="text-xs font-bold text-white">
@@ -824,9 +821,8 @@ export default function PassengerBook() {
                     className="p-1 transition-transform hover:scale-125"
                   >
                     <FiStar
-                      className={`size-8 ${
-                        star <= ratingStars ? "text-amber-400 fill-amber-400" : "text-slate-600"
-                      }`}
+                      className={`size-8 ${star <= ratingStars ? "text-amber-400 fill-amber-400" : "text-slate-600"
+                        }`}
                     />
                   </button>
                 ))}
@@ -846,11 +842,10 @@ export default function PassengerBook() {
                             isSelected ? prev.filter((t) => t !== tag) : [...prev, tag]
                           )
                         }
-                        className={`rounded-full px-3 py-1 text-xs font-semibold transition ${
-                          isSelected
+                        className={`rounded-full px-3 py-1 text-xs font-semibold transition ${isSelected
                             ? "bg-amber-400 text-slate-950 font-bold"
                             : "border border-white/10 bg-white/5 text-slate-400 hover:text-white"
-                        }`}
+                          }`}
                       >
                         {tag}
                       </button>
