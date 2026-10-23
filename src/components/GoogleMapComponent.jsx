@@ -9,7 +9,7 @@ import { FaCarSide } from "react-icons/fa";
 //   VITE_GOOGLE_MAPS_API_KEY=AIzaSy...
 // OR insert your API key directly in the string below:
 // ==============================================================================
-export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "";
+export const GOOGLE_MAPS_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 // Popular city landmarks for quick-tap selection
 export const POPULAR_LANDMARKS = [
@@ -30,9 +30,9 @@ export function calculateDistanceKm(lat1, lon1, lat2, lon2) {
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
     Math.cos((lat1 * Math.PI) / 180) *
-      Math.cos((lat2 * Math.PI) / 180) *
-      Math.sin(dLon / 2) *
-      Math.sin(dLon / 2);
+    Math.cos((lat2 * Math.PI) / 180) *
+    Math.sin(dLon / 2) *
+    Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const d = R * c;
   return Math.max(1.2, parseFloat(d.toFixed(1)));

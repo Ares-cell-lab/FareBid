@@ -12,7 +12,7 @@ export default function CarMotionLayout({
   progress = 0, // 0 to 1
   phase = "in_progress", // "driving_to_pickup" | "in_progress" | "completed"
   speedKmH = 48,
-  maxSeconds = 90,
+  maxSeconds = 60,
   elapsedSeconds = 0,
 }) {
   const percent = Math.min(100, Math.max(0, Math.round(progress * 100)));
